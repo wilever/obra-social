@@ -1,0 +1,38 @@
+{
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "com.mycompany",
+            "nativeLanguage": "en"
+        },
+        "jhipsterVersion": "5.8.1",
+        "applicationType": "monolith",
+        "baseName": "obraSocial",
+        "packageName": "com.mycompany",
+        "packageFolder": "com/mycompany",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "hazelcast",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "postgresql",
+        "searchEngine": false,
+        "messageBroker": false,
+        "serviceDiscoveryType": false,
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "jwtSecretKey": "MGI1NjVmMzBiMDA0YzE5NjAzNmFhNDA1Y2Q0NDkyZmQwOWNiZDY5OTA2M2EzNzhlMzVkMjcwZDM1YTljZDgwYmFmYmM0Yjc1ZWRlYzAzNDQ0ZmEzMWM2Y2ViOTY5YjMzNTlhOTE4MTcwYTM2NGY4YmFhYWNmMTc0YjE4ZjMzYjE=",
+        "clientFramework": "angularX",
+        "useSass": true,
+        "clientPackageManager": "npm",
+        "testFrameworks": [],
+        "jhiPrefix": "jhi",
+        "entitySuffix": "",
+        "dtoSuffix": "DTO",
+        "otherModules": [],
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en", "es"]
+    }
+}
