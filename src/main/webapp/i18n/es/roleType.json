@@ -1,0 +1,22 @@
+{
+    "obraSocialApp": {
+        "roleType": {
+            "home": {
+                "title": "Role Types",
+                "createLabel": "Crear nuevo Role Type",
+                "createOrEditLabel": "Crear o editar Role Type"
+            },
+            "created": "Un nuevo Role Type ha sido creado con el identificador {{ param }}",
+            "updated": "Un Role Type ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Role Type ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Role Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Role Type"
+            },
+            "type": "Type",
+            "description": "Description"
+        }
+    }
+}

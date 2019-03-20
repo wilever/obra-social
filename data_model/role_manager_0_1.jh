@@ -1,0 +1,19 @@
+/* ROLE for add or revoke user access to resources */
+entity RoleList {
+    role String required
+    description String required
+    resource String required
+}
+/* Role type or gropu of roles*/
+entity RoleType {
+	type String required
+    description String required
+}
+
+relationship ManyToOne {
+  	RoleList{user(login) required} to User
+    RoleList{roleType(type) required} to RoleType
+}
+
+service all with serviceImpl
+paginate all with pagination

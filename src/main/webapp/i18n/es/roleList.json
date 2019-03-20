@@ -1,0 +1,25 @@
+{
+    "obraSocialApp": {
+        "roleList": {
+            "home": {
+                "title": "Role Lists",
+                "createLabel": "Crear nuevo Role List",
+                "createOrEditLabel": "Crear o editar Role List"
+            },
+            "created": "Un nuevo Role List ha sido creado con el identificador {{ param }}",
+            "updated": "Un Role List ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Role List ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Role List {{ id }}?"
+            },
+            "detail": {
+                "title": "Role List"
+            },
+            "role": "Role",
+            "description": "Description",
+            "resource": "Resource",
+            "user": "User",
+            "roleType": "Role Type"
+        }
+    }
+}
