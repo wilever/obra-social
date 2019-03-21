@@ -30,7 +30,11 @@
                 <td>{{affiliate.startDate | date:'mediumDate'}}</td>
                 <td>{{affiliate.endDate | date:'mediumDate'}}</td>
                 <td>{{affiliate.number}}</td>
-                <td>{{affiliate.pay}}</td>
+                <td class="text-center">
+                        <fa-icon [icon]= "affiliate.pay ? 'check':'times'" aria-hidden="true"
+                        class="{{affiliate.pay ? 'text-success':'text-danger'}}"></fa-icon>
+                       <!--{{affiliate.pay}}-->
+                    </td>
                 <td>{{affiliate.remark}}</td>
                 <td>
                     <div *ngIf="affiliate.company">

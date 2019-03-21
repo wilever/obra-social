@@ -56,10 +56,12 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="obraSocialApp.provider.pay" for="field_pay">Pay</label>
-                    <input type="checkbox" class="form-control" name="pay" id="field_pay"
-                        [(ngModel)]="provider.pay" />
+                <div class="form-check">
+                    <label class="form-control-label" for="field_pay">
+                            <input type="checkbox" class="form-check-input" name="pay" id="field_pay"
+                            [(ngModel)]="provider.pay" />
+                            <span jhiTranslate="obraSocialApp.provider.pay">Pay</span>
+                    </label>
                     <div [hidden]="!(editForm.controls.pay?.dirty && editForm.controls.pay?.invalid)">
                         <small class="form-text text-danger"
                         [hidden]="!editForm.controls.pay?.errors?.required" jhiTranslate="entity.validation.required">

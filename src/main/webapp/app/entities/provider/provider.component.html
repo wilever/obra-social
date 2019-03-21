@@ -30,7 +30,11 @@
                 <td>{{provider.startDate | date:'mediumDate'}}</td>
                 <td>{{provider.endDate | date:'mediumDate'}}</td>
                 <td>{{provider.number}}</td>
-                <td>{{provider.pay}}</td>
+                <td class="text-center">
+                        <fa-icon [icon]= "provider.pay ? 'check':'times'" aria-hidden="true"
+                        class="{{provider.pay ? 'text-success':'text-danger'}}"></fa-icon>
+                       <!--{{provider.pay}}-->
+                    </td>
                 <td>{{provider.remark}}</td>
                 <td>
                     <div *ngIf="provider.company">
