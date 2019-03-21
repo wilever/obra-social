@@ -1,0 +1,25 @@
+/* Company */
+entity Company {
+    name String required
+    description String
+}
+entity Affiliate {
+	startDate LocalDate required
+    endDate LocalDate required
+    number Integer required
+    pay Boolean required
+    remark String
+}
+entity Provider {
+	startDate LocalDate required
+    endDate LocalDate required
+    number Integer required
+    pay Boolean required
+    remark String
+}
+relationship ManyToOne {
+	Affiliate{company(name) required} to Company
+  	Provider{company(name) required} to Company
+}
+service all with serviceImpl
+paginate all with pagination
