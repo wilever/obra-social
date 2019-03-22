@@ -8,6 +8,10 @@ import { VERSION } from 'app/app.constants';
 import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 
+// import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+// import { JhiAlertService } from 'ng-jhipster';
+// import { ICompany } from 'app/shared/model/company.model';
+// import { CompanyService } from '../../entities/company/company.service';
 @Component({
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
@@ -20,6 +24,8 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
+    companies: any[];
+    company: any;
 
     constructor(
         private loginService: LoginService,
@@ -30,11 +36,14 @@ export class NavbarComponent implements OnInit {
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
         private router: Router
-    ) {
+    ) // private jhiAlertService: JhiAlertService,
+    // private companyService: CompanyService
+    {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
+        this.companies = [{ name: 'up' }, { name: 'swiss' }];
+        this.company = this.companies[0];
     }
-
     ngOnInit() {
         this.languageHelper.getAll().then(languages => {
             this.languages = languages;
@@ -44,8 +53,32 @@ export class NavbarComponent implements OnInit {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
+        // this.loadAllCompany();
+    }
+    changeCompany(company: any) {
+        this.sessionStorage.store('company', company);
+        this.company = company;
+    }
+    /*
+    protected paginateCompanies(data: ICompany[], headers: HttpHeaders) {
+        this.companies = data;
     }
 
+    protected onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
+    loadAllCompany() {
+        this.companyService
+            .query({
+                page: null,
+                size: null,
+                sort: null
+            })
+            .subscribe(
+                (res: HttpResponse<ICompany[]>) => this.paginateCompanies(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
+    }*/
     changeLanguage(languageKey: string) {
         this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
