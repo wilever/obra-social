@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
-
 import { VERSION } from 'app/app.constants';
 import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-
-// import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-// import { JhiAlertService } from 'ng-jhipster';
-// import { ICompany } from 'app/shared/model/company.model';
-// import { CompanyService } from '../../entities/company/company.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { ICompany } from 'app/shared/model/company.model';
+import { CompanyService } from '../../entities/company/company.service';
+import { Subscription } from 'rxjs';
+import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 @Component({
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
@@ -24,8 +23,16 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
-    companies: any[];
-    company: any;
+    companies: ICompany[];
+    company: ICompany;
+    totalItems: any;
+    itemsPerPage: any;
+    page: any;
+    predicate: any;
+    previousPage: any;
+    reverse: any;
+    routeData: any;
+    eventSubscriber: Subscription;
 
     constructor(
         private loginService: LoginService,
@@ -35,14 +42,13 @@ export class NavbarComponent implements OnInit {
         private accountService: AccountService,
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
-        private router: Router
-    ) // private jhiAlertService: JhiAlertService,
-    // private companyService: CompanyService
-    {
+        private router: Router,
+        private jhiAlertService: JhiAlertService,
+        private companyService: CompanyService,
+        private eventManager: JhiEventManager
+    ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
-        this.companies = [{ name: 'up' }, { name: 'swiss' }];
-        this.company = this.companies[0];
     }
     ngOnInit() {
         this.languageHelper.getAll().then(languages => {
@@ -53,32 +59,47 @@ export class NavbarComponent implements OnInit {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
-        // this.loadAllCompany();
+        this.loadAllCompany();
+        this.registerChangeInCompanies();
+        this.company = this.companies[0];
     }
-    changeCompany(company: any) {
+    changeCompany(company: ICompany) {
         this.sessionStorage.store('company', company);
         this.company = company;
     }
-    /*
+
     protected paginateCompanies(data: ICompany[], headers: HttpHeaders) {
         this.companies = data;
+        if (this.company == null && this.companies) {
+            this.company = this.companies[0];
+        }
     }
 
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
+    sort() {
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
+    }
     loadAllCompany() {
         this.companyService
             .query({
-                page: null,
-                size: null,
+                page: 0,
+                size: 20,
                 sort: null
             })
             .subscribe(
                 (res: HttpResponse<ICompany[]>) => this.paginateCompanies(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
-    }*/
+    }
+    registerChangeInCompanies() {
+        this.eventSubscriber = this.eventManager.subscribe('companyListModification', response => this.loadAllCompany());
+    }
     changeLanguage(languageKey: string) {
         this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
@@ -104,6 +125,7 @@ export class NavbarComponent implements OnInit {
 
     toggleNavbar() {
         this.isNavbarCollapsed = !this.isNavbarCollapsed;
+        this.registerChangeInCompanies();
     }
 
     getImageUrl() {
