@@ -16,6 +16,58 @@
                     </span>
                 </a>
             </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    <a class="nav-link" routerLink="coverb/resume" (click)="collapseNavbar()">
+                        <span>
+                            <fa-icon icon="cube"></fa-icon>
+                            <span>Wizzard</span>
+                        </span>
+                    </a>
+                </li>
+            <ul class="navbar-nav ml-auto text-center">
+                    <li ngbDropdown class="nav-item dropdown pointer" *ngIf="companies && companies.length > 1">
+                        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="companynavBarDropdown">
+                            <span>
+                                <fa-icon icon="building"></fa-icon>
+                                {{company.name}}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="companynavBarDropdown">
+                            <li *ngFor="let company of companies">
+                                <a class="dropdown-item" [jhiActiveMenu]="company" href="javascript:void(0);" (click)="changeCompany(company);collapseNavbar();">{{company.name}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!--
+            <li ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="coverb">
+                    <span>
+                        <fa-icon [icon]="'cubes'"></fa-icon>
+                        <span jhiTranslate="global.menu.coverb">Coverb</span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                <li>
+                    <a class="dropdown-item" routerLink="coverb/default" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <fa-icon [icon]="'cube'" [fixedWidth]="true"></fa-icon>
+                        <span jhiTranslate="default.page.title">Default</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" routerLink="coverb/resume" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <fa-icon [icon]="'cube'" [fixedWidth]="true"></fa-icon>
+                        <span jhiTranslate="resume.page.title">Resume</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" routerLink="coverb/company" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <fa-icon [icon]="'cube'" [fixedWidth]="true"></fa-icon>
+                        <span jhiTranslate="company.page.title">Company</span>
+                    </a>
+                </li>
+                </ul>
+            </li>-->
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
@@ -27,6 +79,24 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+                    <li>
+                        <a class="dropdown-item" routerLink="company" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.company">Company</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="affiliate" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.affiliate">Affiliate</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="provider" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.provider">Provider</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

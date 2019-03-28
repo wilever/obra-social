@@ -1,0 +1,26 @@
+{
+    "obraSocialApp": {
+        "affiliate": {
+            "home": {
+                "title": "Affiliates",
+                "createLabel": "Crear nuevo Affiliate",
+                "createOrEditLabel": "Crear o editar Affiliate"
+            },
+            "created": "Un nuevo Affiliate ha sido creado con el identificador {{ param }}",
+            "updated": "Un Affiliate ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Affiliate ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Affiliate {{ id }}?"
+            },
+            "detail": {
+                "title": "Affiliate"
+            },
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "number": "Number",
+            "pay": "Pay",
+            "remark": "Remark",
+            "company": "Company"
+        }
+    }
+}
