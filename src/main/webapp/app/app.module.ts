@@ -20,7 +20,7 @@ import { ObraSocialEntityModule } from './entities/entity.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DemoMaterialModule } from './material-module';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+// import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ObraSocialWizzardModule } from 'app/wizzard/module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -81,4 +81,4 @@ export class ObraSocialAppModule {
     }
 }
 
-platformBrowserDynamic().bootstrapModule(ObraSocialAppModule);
+// platformBrowserDynamic().bootstrapModule(ObraSocialAppModule);
