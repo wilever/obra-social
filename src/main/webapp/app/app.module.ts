@@ -17,12 +17,22 @@ import { ObraSocialAppRoutingModule } from './app-routing.module';
 import { ObraSocialHomeModule } from './home/home.module';
 import { ObraSocialAccountModule } from './account/account.module';
 import { ObraSocialEntityModule } from './entities/entity.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DemoMaterialModule } from './material-module';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ObraSocialWizzardModule } from 'app/wizzard/module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
 
 @NgModule({
     imports: [
+        DemoMaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        ObraSocialWizzardModule,
         BrowserModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({
@@ -70,3 +80,5 @@ export class ObraSocialAppModule {
         this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
     }
 }
+
+platformBrowserDynamic().bootstrapModule(ObraSocialAppModule);

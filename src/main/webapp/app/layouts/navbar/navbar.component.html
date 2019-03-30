@@ -16,6 +16,14 @@
                     </span>
                 </a>
             </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="wizzard" (click)="collapseNavbar()">
+                    <span>
+                        <fa-icon icon="cube"></fa-icon>
+                        <span>Wizzard</span>
+                    </span>
+                </a>
+            </li>
             <ul class="navbar-nav ml-auto text-center">
                     <li ngbDropdown class="nav-item dropdown pointer" *ngIf="companies && companies.length > 1">
                         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="companynavBarDropdown">
