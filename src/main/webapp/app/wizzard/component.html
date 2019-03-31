@@ -6,11 +6,11 @@
         <mat-vertical-stepper [linear]="isLinear" #stepper>
             <mat-step [stepControl]="firstFormGroup">
                 <form [formGroup]="firstFormGroup">
-                    <ng-template matStepLabel>Select your company {{company}}</ng-template>
+                    <ng-template matStepLabel>Select your company</ng-template>
                     <mat-form-field>
                         <mat-select placeholder="Company">
-                            <mat-option *ngFor="let option of options" [value]="option" required>
-                                {{option}}
+                            <mat-option *ngFor="let company of companies" [value]="company.name" required>
+                                {{company.name}}
                             </mat-option>
                         </mat-select>
                         <!--<input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>-->
