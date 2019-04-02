@@ -1,13 +1,9 @@
-<section id="resume">
-    <div class="container-fluid">
-        <!--<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
-            {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
-          </button>-->
-        <mat-vertical-stepper [linear]="isLinear" #stepper>
+<div *ngIf="!showData; else forminfo">
+<mat-vertical-stepper [linear]="isLinear" #stepper>
             <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="firstFormGroup">
+                <form [formGroup]="wizzardForm">
                     <ng-template matStepLabel>Select your company</ng-template>
-                    <mat-form-field>
+                    <mat-form-field formControlName="company">
                         <mat-select placeholder="Company">
                             <mat-option *ngFor="let company of companies" [value]="company.name" required>
                                 {{company.name}}
@@ -15,6 +11,7 @@
                         </mat-select>
                         <!--<input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>-->
                     </mat-form-field>
+                    <!--{{wizzardForm.value.company}}-->
                     <div align="end">
                         <button mat-button matStepperNext>Next</button>
                     </div>
@@ -72,6 +69,19 @@
                     <div align="end">
                         <button mat-button matStepperPrevious>Back</button>
                         <button mat-button (click)="stepper.reset()">Reset</button>
+                        <button (click)="showData=!showData">ShowData</button>
                     </div>
+                </form>
             </mat-step>
         </mat-vertical-stepper>
+    </div>
+
+        <ng-template #forminfo>
+            <div class="form-container">
+              <div class="row columns">
+                  <h1>{{ name }}</h1>
+                  <p>{{ description }}</p>
+                  <button (click)="showData=!showData">ShowData</button>
+              </div>
+            </div>
+          </ng-template>

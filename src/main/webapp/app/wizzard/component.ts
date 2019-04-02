@@ -131,6 +131,7 @@ export interface Tile {
     providers: [DynamicDatabase]
 })
 export class WizzardComponent implements OnInit {
+    wizzardForm: FormGroup;
     companies: ICompany[];
     company: ICompany;
     // company: string;
