@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DemoMaterialModule } from './material-module';
 // import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ObraSocialWizzardModule } from 'app/wizzard/module';
+import { ObraSocialWizzardFormModule } from 'app/wizzard-form/module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
@@ -33,6 +34,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         ReactiveFormsModule,
         BrowserAnimationsModule,
         ObraSocialWizzardModule,
+        ObraSocialWizzardFormModule,
         BrowserModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({
