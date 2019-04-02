@@ -25,16 +25,18 @@ export class DynamicDatabase {
     dataMap = new Map<string, string[]>([
         ['Associate', ['Affiliations', 'Report', 'CCCCC']],
         ['Providers', ['Affiliations', 'Report', 'DDDDD']],
-        ['CCCCCC', ['XXX', 'YYY', 'ZZZ']]
+        ['CCCCCC', ['XXX', 'YYY', 'ZZZ']],
+        ['DDD', []]
     ]);
 
     rootLevelNodes: string[] = ['Associate', 'Providers'];
 
+    // Modulos disponible modulo
     /** Initial data from database */
     initialData(): DynamicFlatNode[] {
         return this.rootLevelNodes.map(name => new DynamicFlatNode(name, 0, true));
     }
-
+    // Submodulos de un
     getChildren(node: string): string[] | undefined {
         return this.dataMap.get(node);
     }
