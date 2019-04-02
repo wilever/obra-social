@@ -124,6 +124,7 @@ export class DynamicDataSource {
     providers: [DynamicDatabase]
 })
 export class WizzardFormComponent implements OnInit {
+    dataSelected: string;
     showData: boolean;
     rForm: FormGroup;
     wizzardForm: FormGroup;

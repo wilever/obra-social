@@ -1,5 +1,4 @@
 <div *ngIf="!showData; else dataInfo">
-    <form [formGroup]="rForm">
             <h1>My Reactive Form</h1>
             <mat-form-field>
                 <mat-select [(value)]="companySelected" placeholder="Company">
@@ -8,11 +7,11 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <p>company: {{companySelected}}</p>
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-                    <button mat-icon-button disabled></button>
-                    {{node.item}}
+                    <button mat-icon-button (click)="dataSelected=node.item">
+                        {{node.item}}
+                    </button>
                 </mat-tree-node>
                 <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
                     <button mat-icon-button [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
@@ -25,9 +24,10 @@
                     </mat-progress-bar>
                 </mat-tree-node>
             </mat-tree>
-    </form>
+            <button (click)="showData=!showData">ShowData</button>
 </div>
 <ng-template #dataInfo>
-                    <p>company: {{companySelected}}</p>
+        <p>data: {{dataSelected}}</p>
+        <p>company: {{companySelected}}</p>
     <button (click)="showData=!showData">ShowData</button>
 </ng-template>
