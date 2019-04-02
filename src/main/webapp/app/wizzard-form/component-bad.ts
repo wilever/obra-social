@@ -16,29 +16,25 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 export class DynamicFlatNode {
     constructor(public item: string, public level = 1, public expandable = false, public isLoading = false) {}
 }
-
 /**
  * Database for dynamic data. When expanding a node in the tree, the data source will need to fetch
  * the descendants data from the database.
  */
 export class DynamicDatabase {
     dataMap = new Map<string, string[]>([
-        ['Associate', ['Affiliations', 'Report', 'CCCCC']],
-        ['Providers', ['Affiliations', 'Report', 'DDDDD']],
-        ['CCCCCC', ['XXX', 'YYY', 'ZZZ']]
+        ['Fruits', ['Apple', 'Orange', 'Banana']],
+        ['Vegetables', ['Tomato', 'Potato', 'Onion']],
+        ['Apple', ['Fuji', 'Macintosh']],
+        ['Onion', ['Yellow', 'White', 'Purple']]
     ]);
-
-    rootLevelNodes: string[] = ['Associate', 'Providers'];
-
+    rootLevelNodes: string[] = ['Fruits', 'Vegetables'];
     /** Initial data from database */
     initialData(): DynamicFlatNode[] {
         return this.rootLevelNodes.map(name => new DynamicFlatNode(name, 0, true));
     }
-
     getChildren(node: string): string[] | undefined {
         return this.dataMap.get(node);
     }
-
     isExpandable(node: string): boolean {
         return this.dataMap.has(node);
     }
@@ -53,7 +49,6 @@ export class DynamicDatabase {
 @Injectable()
 export class DynamicDataSource {
     dataChange = new BehaviorSubject<DynamicFlatNode[]>([]);
-
     get data(): DynamicFlatNode[] {
         return this.dataChange.value;
     }
@@ -61,19 +56,15 @@ export class DynamicDataSource {
         this.treeControl.dataNodes = value;
         this.dataChange.next(value);
     }
-
     constructor(private treeControl: FlatTreeControl<DynamicFlatNode>, private database: DynamicDatabase) {}
-
     connect(collectionViewer: CollectionViewer): Observable<DynamicFlatNode[]> {
         this.treeControl.expansionModel.onChange.subscribe(change => {
             if ((change as SelectionChange<DynamicFlatNode>).added || (change as SelectionChange<DynamicFlatNode>).removed) {
                 this.handleTreeControl(change as SelectionChange<DynamicFlatNode>);
             }
         });
-
         return merge(collectionViewer.viewChange, this.dataChange).pipe(map(() => this.data));
     }
-
     /** Handle expand/collapse behaviors */
     handleTreeControl(change: SelectionChange<DynamicFlatNode>) {
         if (change.added) {
@@ -86,7 +77,6 @@ export class DynamicDataSource {
                 .forEach(node => this.toggleNode(node, false));
         }
     }
-
     /**
      * Toggle the node, remove from display list
      */
@@ -97,9 +87,7 @@ export class DynamicDataSource {
             // If no children, or cannot find the node, no op
             return;
         }
-
         node.isLoading = true;
-
         setTimeout(() => {
             if (expand) {
                 const nodes = children.map(name => new DynamicFlatNode(name, node.level + 1, this.database.isExpandable(name)));
@@ -109,13 +97,24 @@ export class DynamicDataSource {
                 for (let i = index + 1; i < this.data.length && this.data[i].level > node.level; i++, count++) {}
                 this.data.splice(index + 1, count);
             }
-
             // notify the change
             this.dataChange.next(this.data);
             node.isLoading = false;
         }, 1000);
     }
 }
+/*
+export interface Tile {
+    color: string;
+    cols: number;
+    rows: number;
+    text: string;
+}
+
+export interface Food {
+    value: string;
+    viewValue: string;
+}*/
 
 @Component({
     selector: 'jhi-resume',
@@ -123,12 +122,35 @@ export class DynamicDataSource {
     styleUrls: ['style.scss'],
     providers: [DynamicDatabase]
 })
-export class WizzardFormComponent implements OnInit {
-    showData: boolean;
-    rForm: FormGroup;
+export class WizzardForm2Component implements OnInit {
+    /*
+    companySelected: ICompany;
     wizzardForm: FormGroup;
     companies: ICompany[];
     company: ICompany;
+    */
+    // company: string;
+    // mode = new FormControl('over');
+    // shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
+    // myControl = new FormControl();
+    // options: string[] = ['One', 'Two', 'Three'];
+    // companies: string[] = ['company_One', 'company_Two', 'company_Three'];
+    // filteredOptions: Observable<string[]>;
+    /*
+    favoriteSeason: string;
+    seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
+    step = 0;
+    tiles: Tile[] = [
+        { text: 'One', cols: 3, rows: 1, color: 'lightblue' },
+        { text: 'Two', cols: 1, rows: 2, color: 'lightgreen' },
+        { text: 'Three', cols: 1, rows: 1, color: 'lightpink' },
+        { text: 'Four', cols: 2, rows: 1, color: '#DDBDF1' }
+    ];*/
+
+    // isLinear = false;
+    // firstFormGroup: FormGroup
+    // secondFormGroup: FormGroup;
+
     treeControl: FlatTreeControl<DynamicFlatNode>;
 
     dataSource: DynamicDataSource;
@@ -140,22 +162,16 @@ export class WizzardFormComponent implements OnInit {
     hasChild = (_: number, _nodeData: DynamicFlatNode) => _nodeData.expandable;
 
     constructor(
-        private _formBuilder: FormBuilder,
-        database: DynamicDatabase,
-        private companyService: CompanyService,
-        private jhiAlertService: JhiAlertService
+        // private _formBuilder: FormBuilder,
+        database: DynamicDatabase
+        // private companyService: CompanyService,
+        // private jhiAlertService: JhiAlertService
     ) {
         this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
         this.dataSource = new DynamicDataSource(this.treeControl, database);
-
         this.dataSource.data = database.initialData();
-        this.rForm = _formBuilder.group({
-            name: [null, Validators.required],
-            description: [null, Validators.compose([Validators.required, Validators.minLength(30), Validators.maxLength(500)])],
-            validate: ''
-        });
     }
-
+    /*
     loadAllCompany() {
         this.companyService
             .query({
@@ -179,8 +195,37 @@ export class WizzardFormComponent implements OnInit {
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
-    ngOnInit() {
-        this.loadAllCompany();
-        this.showData = false;
+/*
+    setStep(index: number) {
+        this.step = index;
     }
+
+    nextStep() {
+        this.step++;
+    }
+
+    prevStep() {
+        this.step--;
+    }*/
+    ngOnInit() {
+        /*
+        this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filter(value))
+        );
+        /*
+        this.firstFormGroup = this._formBuilder.group({
+            firstCtrl: ['', Validators.required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+            secondCtrl: ['', Validators.required]
+        });*/
+        // this.loadAllCompany();
+    }
+    /*
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+
+        return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    }*/
 }

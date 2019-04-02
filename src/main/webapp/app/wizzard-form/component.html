@@ -1,146 +1,33 @@
 <div *ngIf="!showData; else dataInfo">
-    <form [formGroup]="rForm" (ngSubmit)="addPost(rForm.value)">
-          <h1>My Reactive Form</h1>
-                    <mat-form-field>
-                        <mat-select [(value)]="companySelected" placeholder="Company">
-                            <mat-option *ngFor="let company of companies" [value]="company.name" required>
-                                {{company.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <p>company: {{companySelected}}</p>
-                    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-                                <button mat-icon-button disabled></button>
-                                {{node.item}}
-                            </mat-tree-node>
-                            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-                                <button mat-icon-button [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
-                                    <mat-icon class="mat-icon-rtl-mirror">
-                                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                                    </mat-icon>
-                                </button>
-                                {{node.item}}
-                                <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate"
-                                    class="example-tree-progress-bar"></mat-progress-bar>
-                            </mat-tree-node>
-                        </mat-tree>
-<!--
-          <label for="singleSelect"> Company: </label>
-          <select name="singleSelect">
-            <option value="option-1">Option 1</option>
-            <option value="option-2">Option 2</option>
-          </select><br>
-          
-          <label>Name
-            <input type="text" formControlName="name">
-          </label>
-          <div class="alert" *ngIf="!rForm.controls['name'].valid && rForm.controls['name'].touched">{{ titleAlert }}</div>
-  
-  
-          <label>Description
-            <textarea formControlName="description"></textarea>
-          </label>
-          <div class="alert" *ngIf="!rForm.controls['description'].valid && rForm.controls['description'].touched">You must specify a description that's between 30 and 500 characters.</div>
-  
-  
-          <label for="validate">Minimum of 3 Characters</label>
-          <input type="checkbox" name="validate" formControlName="validate" value="1"> On
-  
-          <input type="submit" class="button expanded" value="Submit Form" [disabled]="!rForm.valid">
-          -->
-    </form>
-  </div>
-  <ng-template #dataInfo>
+    <form [formGroup]="rForm">
+            <h1>My Reactive Form</h1>
+            <mat-form-field>
+                <mat-select [(value)]="companySelected" placeholder="Company">
+                    <mat-option *ngFor="let company of companies" [value]="company.name" required>
+                        {{company.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <p>company: {{companySelected}}</p>
-          <h1>{{ name }}</h1>
-          <p>{{ description }}</p>
-          <button (click)="showData=!showData">ShowData</button>
-  </ng-template>
-  <!--
-<div *ngIf="!showData; else forminfo">
-<mat-vertical-stepper [linear]="isLinear" #stepper>
-            <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="wizzardForm">
-                    <ng-template matStepLabel>Select your company</ng-template>
-                    <mat-form-field formControlName="company">
-                        <mat-select placeholder="Company">
-                            <mat-option *ngFor="let company of companies" [value]="company.name" required>
-                                {{company.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <div align="end">
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="secondFormGroup">
-                <form [formGroup]="secondFormGroup">
-                    <ng-template matStepLabel>Select your module</ng-template>
-                    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-                            <button mat-icon-button disabled></button>
-                            {{node.item}}
-                        </mat-tree-node>
-                        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-                            <button mat-icon-button [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
-                                <mat-icon class="mat-icon-rtl-mirror">
-                                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                                </mat-icon>
-                            </button>
-                            {{node.item}}
-                            <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate"
-                                class="example-tree-progress-bar"></mat-progress-bar>
-                        </mat-tree-node>
-                    </mat-tree>
-                    <div align="end">
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step>
-                <ng-template matStepLabel>Search specifications</ng-template>
-                <form class="example-form">
-                    <mat-form-field class="example-full-width">
-                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
-                            [matAutocomplete]="auto">
-                        <mat-autocomplete #auto="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                {{option}}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-select placeholder="Select option">
-                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                {{option}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <br />
-                    <mat-radio-group aria-label="Select an option">
-                        <mat-radio-button value="1">Option 1</mat-radio-button>
-                        <mat-radio-button value="2">Option 2</mat-radio-button>
-                    </mat-radio-group>
-                    <div align="end">
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button (click)="stepper.reset()">Reset</button>
-                        <button (click)="showData=!showData">ShowData</button>
-                    </div>
-                </form>
-            </mat-step>
-        </mat-vertical-stepper>
-    </div>
-
-        <ng-template #forminfo>
-            <div class="form-container">
-              <div class="row columns">
-                  <h1>{{ name }}</h1>
-                  <p>{{ description }}</p>
-                  <button (click)="showData=!showData">ShowData</button>
-              </div>
-            </div>
-          </ng-template>
-          -->
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                    <button mat-icon-button disabled></button>
+                    {{node.item}}
+                </mat-tree-node>
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                    <button mat-icon-button [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
+                        <mat-icon class="mat-icon-rtl-mirror">
+                            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                        </mat-icon>
+                    </button>
+                    {{node.item}}
+                    <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" class="example-tree-progress-bar">
+                    </mat-progress-bar>
+                </mat-tree-node>
+            </mat-tree>
+    </form>
+</div>
+<ng-template #dataInfo>
+                    <p>company: {{companySelected}}</p>
+    <button (click)="showData=!showData">ShowData</button>
+</ng-template>

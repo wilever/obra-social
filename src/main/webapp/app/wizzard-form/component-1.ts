@@ -117,18 +117,45 @@ export class DynamicDataSource {
     }
 }
 
+export interface Tile {
+    color: string;
+    cols: number;
+    rows: number;
+    text: string;
+}
+
 @Component({
     selector: 'jhi-resume',
-    templateUrl: './component.html',
+    templateUrl: './component-1.html',
     styleUrls: ['style.scss'],
     providers: [DynamicDatabase]
 })
 export class WizzardFormComponent implements OnInit {
-    showData: boolean;
-    rForm: FormGroup;
     wizzardForm: FormGroup;
     companies: ICompany[];
     company: ICompany;
+    // company: string;
+    mode = new FormControl('over');
+    shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
+    myControl = new FormControl();
+    options: string[] = ['One', 'Two', 'Three'];
+    // companies: string[] = ['company_One', 'company_Two', 'company_Three'];
+    filteredOptions: Observable<string[]>;
+    favoriteSeason: string;
+    seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
+    step = 0;
+
+    tiles: Tile[] = [
+        { text: 'One', cols: 3, rows: 1, color: 'lightblue' },
+        { text: 'Two', cols: 1, rows: 2, color: 'lightgreen' },
+        { text: 'Three', cols: 1, rows: 1, color: 'lightpink' },
+        { text: 'Four', cols: 2, rows: 1, color: '#DDBDF1' }
+    ];
+
+    isLinear = false;
+    firstFormGroup: FormGroup;
+    secondFormGroup: FormGroup;
+
     treeControl: FlatTreeControl<DynamicFlatNode>;
 
     dataSource: DynamicDataSource;
@@ -149,11 +176,6 @@ export class WizzardFormComponent implements OnInit {
         this.dataSource = new DynamicDataSource(this.treeControl, database);
 
         this.dataSource.data = database.initialData();
-        this.rForm = _formBuilder.group({
-            name: [null, Validators.required],
-            description: [null, Validators.compose([Validators.required, Validators.minLength(30), Validators.maxLength(500)])],
-            validate: ''
-        });
     }
 
     loadAllCompany() {
@@ -179,8 +201,35 @@ export class WizzardFormComponent implements OnInit {
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
+
+    setStep(index: number) {
+        this.step = index;
+    }
+
+    nextStep() {
+        this.step++;
+    }
+
+    prevStep() {
+        this.step--;
+    }
     ngOnInit() {
+        this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filter(value))
+        );
+        this.firstFormGroup = this._formBuilder.group({
+            firstCtrl: ['', Validators.required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+            secondCtrl: ['', Validators.required]
+        });
         this.loadAllCompany();
-        this.showData = false;
+    }
+
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+
+        return this.options.filter(option => option.toLowerCase().includes(filterValue));
     }
 }
