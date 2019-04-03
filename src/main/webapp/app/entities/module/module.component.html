@@ -19,6 +19,7 @@
             <th jhiSortBy="module.id"><span jhiTranslate="obraSocialApp.module.module">Module</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="moduleType.id"><span jhiTranslate="obraSocialApp.module.moduleType">Module Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="tag.id"><span jhiTranslate="obraSocialApp.module.tag">Tag</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="company.id"><span jhiTranslate="obraSocialApp.module.company">Company</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -39,6 +40,11 @@
                 <td>
                     <div *ngIf="module.tag">
                         <a [routerLink]="['../tag', module.tag?.id, 'view' ]" >{{module.tag?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="module.company">
+                        <a [routerLink]="['../company', module.company?.id, 'view' ]" >{{module.company?.id}}</a>
                     </div>
                 </td>
                 <td class="text-right">

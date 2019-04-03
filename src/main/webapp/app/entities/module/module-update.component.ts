@@ -10,6 +10,8 @@ import { IModuleType } from 'app/shared/model/module-type.model';
 import { ModuleTypeService } from 'app/entities/module-type';
 import { ITag } from 'app/shared/model/tag.model';
 import { TagService } from 'app/entities/tag';
+import { ICompany } from 'app/shared/model/company.model';
+import { CompanyService } from '../company';
 
 @Component({
     selector: 'jhi-module-update',
@@ -25,11 +27,14 @@ export class ModuleUpdateComponent implements OnInit {
 
     tags: ITag[];
 
+    companies: ICompany[];
+
     constructor(
         protected jhiAlertService: JhiAlertService,
         protected moduleService: ModuleService,
         protected moduleTypeService: ModuleTypeService,
         protected tagService: TagService,
+        protected companyService: CompanyService,
         protected activatedRoute: ActivatedRoute
     ) {}
 
@@ -59,6 +64,13 @@ export class ModuleUpdateComponent implements OnInit {
                 map((response: HttpResponse<ITag[]>) => response.body)
             )
             .subscribe((res: ITag[]) => (this.tags = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.companyService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ITag[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ITag[]>) => response.body)
+            )
+            .subscribe((res: ICompany[]) => (this.companies = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
@@ -100,6 +112,10 @@ export class ModuleUpdateComponent implements OnInit {
     }
 
     trackTagById(index: number, item: ITag) {
+        return item.id;
+    }
+
+    trackCompanyById(index: number, item: ICompany) {
         return item.id;
     }
 }

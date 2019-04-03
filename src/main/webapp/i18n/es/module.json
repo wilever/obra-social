@@ -19,7 +19,8 @@
             "module": "Module",
             "name": "Name",
             "moduleType": "Module Type",
-            "tag": "Tag"
+            "tag": "Tag",
+            "company": "Company"
         }
     }
 }

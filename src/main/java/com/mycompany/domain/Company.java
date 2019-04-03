@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -32,6 +34,9 @@ public class Company implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @OneToMany(mappedBy = "company")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Module> names = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -65,6 +70,30 @@ public class Company implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Set<Module> getNames() {
+        return names;
+    }
+
+    public Company names(Set<Module> modules) {
+        this.names = modules;
+        return this;
+    }
+
+    public Company addName(Module module) {
+        this.names.add(module);
+        module.setCompany(this);
+        return this;
+    }
+
+    public Company removeName(Module module) {
+        this.names.remove(module);
+        module.setCompany(null);
+        return this;
+    }
+
+    public void setNames(Set<Module> modules) {
+        this.names = modules;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
