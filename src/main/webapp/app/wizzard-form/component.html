@@ -9,7 +9,7 @@
             </mat-form-field>
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-                    <button mat-raised-button (click)="dataSelected=node.item">
+                    <button mat-button (click)="dataSelected=node.item">
                         {{node.item}}
                     </button>
                 </mat-tree-node>
@@ -18,8 +18,8 @@
                         <mat-icon class="mat-icon-rtl-mirror">
                             {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                         </mat-icon>
+                        {{node.item}}
                     </button>
-                    {{node.item}}
                     <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" class="example-tree-progress-bar">
                     </mat-progress-bar>
                 </mat-tree-node>
