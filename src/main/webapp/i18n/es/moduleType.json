@@ -1,0 +1,23 @@
+{
+    "obraSocialApp": {
+        "moduleType": {
+            "home": {
+                "title": "Module Types",
+                "createLabel": "Crear nuevo Module Type",
+                "createOrEditLabel": "Crear o editar Module Type"
+            },
+            "created": "Un nuevo Module Type ha sido creado con el identificador {{ param }}",
+            "updated": "Un Module Type ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Module Type ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Module Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Module Type"
+            },
+            "type": "Type",
+            "description": "Description",
+            "type": "Type"
+        }
+    }
+}

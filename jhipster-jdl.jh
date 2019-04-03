@@ -1,0 +1,21 @@
+entity Module {
+	name String required
+}
+entity ModuleType {
+	type String
+    description String
+}
+entity Tag {
+	name String
+    description String
+}
+relationship OneToMany {
+	ModuleType{type required} to Module
+    Module{name} to Module
+    Tag{name} to Module
+}
+
+service all with serviceImpl
+paginate all with pagination
+
+

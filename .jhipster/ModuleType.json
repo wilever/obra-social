@@ -1,0 +1,31 @@
+{
+    "name": "ModuleType",
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipValidateRules": "required",
+            "relationshipName": "type",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "moduleType"
+        }
+    ],
+    "changelogDate": "20190402183242",
+    "entityTableName": "module_type",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

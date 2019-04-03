@@ -10,6 +10,9 @@
                 "company": "Company",
                 "affiliate": "Affiliate",
                 "provider": "Provider",
+                "module": "Module",
+                "moduleType": "Module Type",
+                "tag": "Tag",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

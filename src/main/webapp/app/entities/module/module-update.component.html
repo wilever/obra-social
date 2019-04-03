@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-module-heading" jhiTranslate="obraSocialApp.module.home.createOrEditLabel">Create or edit a Module</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!module.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="module.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="obraSocialApp.module.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                        [(ngModel)]="module.name" required/>
+                    <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="obraSocialApp.module.module" for="field_module">Module</label>
+                    <select class="form-control" id="field_module" name="module" [(ngModel)]="module.module" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="moduleOption.id === module.module?.id ? module.module : moduleOption" *ngFor="let moduleOption of modules; trackBy: trackModuleById">{{moduleOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="obraSocialApp.module.moduleType" for="field_moduleType">Module Type</label>
+                    <select class="form-control" id="field_moduleType" name="moduleType" [(ngModel)]="module.moduleType" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="moduleTypeOption.id === module.moduleType?.id ? module.moduleType : moduleTypeOption" *ngFor="let moduleTypeOption of moduletypes; trackBy: trackModuleTypeById">{{moduleTypeOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="obraSocialApp.module.tag" for="field_tag">Tag</label>
+                    <select class="form-control" id="field_tag" name="tag" [(ngModel)]="module.tag" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="tagOption.id === module.tag?.id ? module.tag : tagOption" *ngFor="let tagOption of tags; trackBy: trackTagById">{{tagOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

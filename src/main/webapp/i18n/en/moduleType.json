@@ -1,0 +1,23 @@
+{
+    "obraSocialApp": {
+        "moduleType": {
+            "home": {
+                "title": "Module Types",
+                "createLabel": "Create a new Module Type",
+                "createOrEditLabel": "Create or edit a Module Type"
+            },
+            "created": "A new Module Type is created with identifier {{ param }}",
+            "updated": "A Module Type is updated with identifier {{ param }}",
+            "deleted": "A Module Type is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Module Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Module Type"
+            },
+            "type": "Type",
+            "description": "Description",
+            "type": "Type"
+        }
+    }
+}
