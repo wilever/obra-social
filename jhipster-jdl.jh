@@ -1,5 +1,6 @@
 entity Module {
 	name String required
+    description String
 }
 entity ModuleType {
 	type String
@@ -9,13 +10,26 @@ entity Tag {
 	name String
     description String
 }
+entity Company {
+	name String
+    description String
+}
+entity ColumnModule {
+	tableName String
+    columnName String
+    activeInd Boolean
+    dataType String
+    description String
+    defaultValue String
+}
 relationship OneToMany {
-	ModuleType{type required} to Module
-    Module{name} to Module
-    Tag{name} to Module
+	ModuleType{ModuleType(type) required} to Module
+    Company{Company(name) required} to Module
+    Module{Module(name) } to Module
+    Tag{Tag(name) } to Module
+    Module{Module(name) } to ColumnModule
 }
 
 service all with serviceImpl
 paginate all with pagination
-
-
+filter all

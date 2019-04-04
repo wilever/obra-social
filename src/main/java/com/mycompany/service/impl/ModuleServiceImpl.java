@@ -74,6 +74,7 @@ public class ModuleServiceImpl implements ModuleService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Module : {}", id);        moduleRepository.deleteById(id);
+        log.debug("Request to delete Module : {}", id);
+        moduleRepository.deleteById(id);
     }
 }

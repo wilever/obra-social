@@ -3,9 +3,12 @@ package com.mycompany.web.rest;
 import com.mycompany.ObraSocialApp;
 
 import com.mycompany.domain.Company;
+import com.mycompany.domain.Module;
 import com.mycompany.repository.CompanyRepository;
 import com.mycompany.service.CompanyService;
 import com.mycompany.web.rest.errors.ExceptionTranslator;
+import com.mycompany.service.dto.CompanyCriteria;
+import com.mycompany.service.CompanyQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +57,9 @@ public class CompanyResourceIntTest {
     private CompanyService companyService;
 
     @Autowired
+    private CompanyQueryService companyQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +81,7 @@ public class CompanyResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CompanyResource companyResource = new CompanyResource(companyService);
+        final CompanyResource companyResource = new CompanyResource(companyService, companyQueryService);
         this.restCompanyMockMvc = MockMvcBuilders.standaloneSetup(companyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -94,6 +100,11 @@ public class CompanyResourceIntTest {
         Company company = new Company()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION);
+        // Add required entity
+        Module module = ModuleResourceIntTest.createEntity(em);
+        em.persist(module);
+        em.flush();
+        company.getCompanies().add(module);
         return company;
     }
 
@@ -142,24 +153,6 @@ public class CompanyResourceIntTest {
 
     @Test
     @Transactional
-    public void checkNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = companyRepository.findAll().size();
-        // set the field null
-        company.setName(null);
-
-        // Create the Company, which fails.
-
-        restCompanyMockMvc.perform(post("/api/companies")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(company)))
-            .andExpect(status().isBadRequest());
-
-        List<Company> companyList = companyRepository.findAll();
-        assertThat(companyList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllCompanies() throws Exception {
         // Initialize the database
         companyRepository.saveAndFlush(company);
@@ -187,6 +180,138 @@ public class CompanyResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where name equals to DEFAULT_NAME
+        defaultCompanyShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the companyList where name equals to UPDATED_NAME
+        defaultCompanyShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultCompanyShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the companyList where name equals to UPDATED_NAME
+        defaultCompanyShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where name is not null
+        defaultCompanyShouldBeFound("name.specified=true");
+
+        // Get all the companyList where name is null
+        defaultCompanyShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where description equals to DEFAULT_DESCRIPTION
+        defaultCompanyShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the companyList where description equals to UPDATED_DESCRIPTION
+        defaultCompanyShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultCompanyShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the companyList where description equals to UPDATED_DESCRIPTION
+        defaultCompanyShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+
+        // Get all the companyList where description is not null
+        defaultCompanyShouldBeFound("description.specified=true");
+
+        // Get all the companyList where description is null
+        defaultCompanyShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByCompanyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Module company = ModuleResourceIntTest.createEntity(em);
+        em.persist(company);
+        em.flush();
+        company.addCompany(company);
+        companyRepository.saveAndFlush(company);
+        Long companyId = company.getId();
+
+        // Get all the companyList where company equals to companyId
+        defaultCompanyShouldBeFound("companyId.equals=" + companyId);
+
+        // Get all the companyList where company equals to companyId + 1
+        defaultCompanyShouldNotBeFound("companyId.equals=" + (companyId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultCompanyShouldBeFound(String filter) throws Exception {
+        restCompanyMockMvc.perform(get("/api/companies?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+
+        // Check, that the count call also returns 1
+        restCompanyMockMvc.perform(get("/api/companies/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultCompanyShouldNotBeFound(String filter) throws Exception {
+        restCompanyMockMvc.perform(get("/api/companies?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCompanyMockMvc.perform(get("/api/companies/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

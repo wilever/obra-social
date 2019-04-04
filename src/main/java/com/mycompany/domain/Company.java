@@ -1,6 +1,7 @@
 package com.mycompany.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -27,8 +28,7 @@ public class Company implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "description")
@@ -36,7 +36,7 @@ public class Company implements Serializable {
 
     @OneToMany(mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Module> names = new HashSet<>();
+    private Set<Module> companies = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -71,29 +71,30 @@ public class Company implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    public Set<Module> getNames() {
-        return names;
+
+    public Set<Module> getCompanies() {
+        return companies;
     }
 
-    public Company names(Set<Module> modules) {
-        this.names = modules;
+    public Company companies(Set<Module> modules) {
+        this.companies = modules;
         return this;
     }
 
-    public Company addName(Module module) {
-        this.names.add(module);
+    public Company addCompany(Module module) {
+        this.companies.add(module);
         module.setCompany(this);
         return this;
     }
 
-    public Company removeName(Module module) {
-        this.names.remove(module);
+    public Company removeCompany(Module module) {
+        this.companies.remove(module);
         module.setCompany(null);
         return this;
     }
 
-    public void setNames(Set<Module> modules) {
-        this.names = modules;
+    public void setCompanies(Set<Module> modules) {
+        this.companies = modules;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

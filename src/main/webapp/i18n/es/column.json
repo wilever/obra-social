@@ -1,0 +1,27 @@
+{
+    "obraSocialApp": {
+        "column": {
+            "home": {
+                "title": "Columns",
+                "createLabel": "Crear nuevo Column",
+                "createOrEditLabel": "Crear o editar Column"
+            },
+            "created": "Un nuevo Column ha sido creado con el identificador {{ param }}",
+            "updated": "Un Column ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Column ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Column {{ id }}?"
+            },
+            "detail": {
+                "title": "Column"
+            },
+            "tableName": "Table Name",
+            "columnName": "Column Name",
+            "activeInd": "Active Ind",
+            "dataType": "Data Type",
+            "description": "Description",
+            "defaultValue": "Default Value",
+            "module": "Module"
+        }
+    }
+}

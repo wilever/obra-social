@@ -36,7 +36,7 @@ public class ModuleType implements Serializable {
 
     @OneToMany(mappedBy = "moduleType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Module> types = new HashSet<>();
+    private Set<Module> moduleTypes = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -72,29 +72,29 @@ public class ModuleType implements Serializable {
         this.description = description;
     }
 
-    public Set<Module> getTypes() {
-        return types;
+    public Set<Module> getModuleTypes() {
+        return moduleTypes;
     }
 
-    public ModuleType types(Set<Module> modules) {
-        this.types = modules;
+    public ModuleType moduleTypes(Set<Module> modules) {
+        this.moduleTypes = modules;
         return this;
     }
 
-    public ModuleType addType(Module module) {
-        this.types.add(module);
+    public ModuleType addModuleType(Module module) {
+        this.moduleTypes.add(module);
         module.setModuleType(this);
         return this;
     }
 
-    public ModuleType removeType(Module module) {
-        this.types.remove(module);
+    public ModuleType removeModuleType(Module module) {
+        this.moduleTypes.remove(module);
         module.setModuleType(null);
         return this;
     }
 
-    public void setTypes(Set<Module> modules) {
-        this.types = modules;
+    public void setModuleTypes(Set<Module> modules) {
+        this.moduleTypes = modules;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

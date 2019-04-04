@@ -1,0 +1,46 @@
+{
+    "name": "ColumnModule",
+    "fields": [
+        {
+            "fieldName": "tableName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "columnName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "activeInd",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dataType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "defaultValue",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipName": "module",
+            "otherEntityName": "module",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190404015401",
+    "entityTableName": "column_module",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

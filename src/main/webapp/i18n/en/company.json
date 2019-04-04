@@ -16,7 +16,8 @@
                 "title": "Company"
             },
             "name": "Name",
-            "description": "Description"
+            "description": "Description",
+            "company": "Company"
         }
     }
 }

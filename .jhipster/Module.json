@@ -7,6 +7,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
         }
     ],
     "relationships": [
@@ -18,9 +22,15 @@
         },
         {
             "relationshipType": "one-to-many",
-            "relationshipName": "name",
             "otherEntityName": "module",
-            "otherEntityRelationshipName": "module"
+            "otherEntityRelationshipName": "module",
+            "relationshipName": "module"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "columnModule",
+            "otherEntityRelationshipName": "module",
+            "relationshipName": "module"
         },
         {
             "relationshipName": "moduleType",
@@ -33,6 +43,12 @@
             "otherEntityName": "tag",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "company",
+            "otherEntityName": "company",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20190402183241",
@@ -40,7 +56,7 @@
     "dto": "no",
     "pagination": "pagination",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

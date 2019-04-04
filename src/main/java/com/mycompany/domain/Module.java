@@ -33,23 +33,29 @@ public class Module implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
-    @JsonIgnoreProperties("names")
+    @JsonIgnoreProperties("modules")
     private Module module;
 
     @OneToMany(mappedBy = "module")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Module> names = new HashSet<>();
+    private Set<Module> modules = new HashSet<>();
+    @OneToMany(mappedBy = "module")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ColumnModule> modules = new HashSet<>();
     @ManyToOne
-    @JsonIgnoreProperties("types")
+    @JsonIgnoreProperties("moduleTypes")
     private ModuleType moduleType;
 
     @ManyToOne
-    @JsonIgnoreProperties("names")
+    @JsonIgnoreProperties("tags")
     private Tag tag;
 
     @ManyToOne
-    @JsonIgnoreProperties("names")
+    @JsonIgnoreProperties("companies")
     private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -74,6 +80,19 @@ public class Module implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public Module description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Module getModule() {
         return module;
     }
@@ -87,29 +106,54 @@ public class Module implements Serializable {
         this.module = module;
     }
 
-    public Set<Module> getNames() {
-        return names;
+    public Set<Module> getModules() {
+        return modules;
     }
 
-    public Module names(Set<Module> modules) {
-        this.names = modules;
+    public Module modules(Set<Module> modules) {
+        this.modules = modules;
         return this;
     }
 
-    public Module addName(Module module) {
-        this.names.add(module);
+    public Module addModule(Module module) {
+        this.modules.add(module);
         module.setModule(this);
         return this;
     }
 
-    public Module removeName(Module module) {
-        this.names.remove(module);
+    public Module removeModule(Module module) {
+        this.modules.remove(module);
         module.setModule(null);
         return this;
     }
 
-    public void setNames(Set<Module> modules) {
-        this.names = modules;
+    public void setModules(Set<Module> modules) {
+        this.modules = modules;
+    }
+
+    public Set<ColumnModule> getModules() {
+        return modules;
+    }
+
+    public Module modules(Set<ColumnModule> columnModules) {
+        this.modules = columnModules;
+        return this;
+    }
+
+    public Module addModule(ColumnModule columnModule) {
+        this.modules.add(columnModule);
+        columnModule.setModule(this);
+        return this;
+    }
+
+    public Module removeModule(ColumnModule columnModule) {
+        this.modules.remove(columnModule);
+        columnModule.setModule(null);
+        return this;
+    }
+
+    public void setModules(Set<ColumnModule> columnModules) {
+        this.modules = columnModules;
     }
 
     public ModuleType getModuleType() {
@@ -137,7 +181,7 @@ public class Module implements Serializable {
     public void setTag(Tag tag) {
         this.tag = tag;
     }
-    
+
     public Company getCompany() {
         return company;
     }
@@ -177,6 +221,7 @@ public class Module implements Serializable {
         return "Module{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

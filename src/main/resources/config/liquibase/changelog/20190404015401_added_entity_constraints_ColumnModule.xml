@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity ColumnModule.
+    -->
+    <changeSet id="20190404015401-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="module_id"
+                                 baseTableName="column_module"
+                                 constraintName="fk_column_module_module_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="module"/>
+
+    </changeSet>
+</databaseChangeLog>

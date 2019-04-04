@@ -3,9 +3,12 @@ package com.mycompany.web.rest;
 import com.mycompany.ObraSocialApp;
 
 import com.mycompany.domain.Tag;
+import com.mycompany.domain.Module;
 import com.mycompany.repository.TagRepository;
 import com.mycompany.service.TagService;
 import com.mycompany.web.rest.errors.ExceptionTranslator;
+import com.mycompany.service.dto.TagCriteria;
+import com.mycompany.service.TagQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +57,9 @@ public class TagResourceIntTest {
     private TagService tagService;
 
     @Autowired
+    private TagQueryService tagQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +81,7 @@ public class TagResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TagResource tagResource = new TagResource(tagService);
+        final TagResource tagResource = new TagResource(tagService, tagQueryService);
         this.restTagMockMvc = MockMvcBuilders.standaloneSetup(tagResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -169,6 +175,138 @@ public class TagResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllTagsByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        tagRepository.saveAndFlush(tag);
+
+        // Get all the tagList where name equals to DEFAULT_NAME
+        defaultTagShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the tagList where name equals to UPDATED_NAME
+        defaultTagShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTagsByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        tagRepository.saveAndFlush(tag);
+
+        // Get all the tagList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultTagShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the tagList where name equals to UPDATED_NAME
+        defaultTagShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTagsByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        tagRepository.saveAndFlush(tag);
+
+        // Get all the tagList where name is not null
+        defaultTagShouldBeFound("name.specified=true");
+
+        // Get all the tagList where name is null
+        defaultTagShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTagsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        tagRepository.saveAndFlush(tag);
+
+        // Get all the tagList where description equals to DEFAULT_DESCRIPTION
+        defaultTagShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the tagList where description equals to UPDATED_DESCRIPTION
+        defaultTagShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTagsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        tagRepository.saveAndFlush(tag);
+
+        // Get all the tagList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultTagShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the tagList where description equals to UPDATED_DESCRIPTION
+        defaultTagShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTagsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        tagRepository.saveAndFlush(tag);
+
+        // Get all the tagList where description is not null
+        defaultTagShouldBeFound("description.specified=true");
+
+        // Get all the tagList where description is null
+        defaultTagShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTagsByTagIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Module tag = ModuleResourceIntTest.createEntity(em);
+        em.persist(tag);
+        em.flush();
+        tag.addTag(tag);
+        tagRepository.saveAndFlush(tag);
+        Long tagId = tag.getId();
+
+        // Get all the tagList where tag equals to tagId
+        defaultTagShouldBeFound("tagId.equals=" + tagId);
+
+        // Get all the tagList where tag equals to tagId + 1
+        defaultTagShouldNotBeFound("tagId.equals=" + (tagId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultTagShouldBeFound(String filter) throws Exception {
+        restTagMockMvc.perform(get("/api/tags?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(tag.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+
+        // Check, that the count call also returns 1
+        restTagMockMvc.perform(get("/api/tags/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultTagShouldNotBeFound(String filter) throws Exception {
+        restTagMockMvc.perform(get("/api/tags?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTagMockMvc.perform(get("/api/tags/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

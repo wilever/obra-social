@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ICompany } from 'app/shared/model/company.model';
 import { CompanyService } from './company.service';
-import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
     selector: 'jhi-company-update',
@@ -15,11 +14,7 @@ export class CompanyUpdateComponent implements OnInit {
     company: ICompany;
     isSaving: boolean;
 
-    constructor(
-        protected companyService: CompanyService,
-        protected activatedRoute: ActivatedRoute,
-        protected eventManager: JhiEventManager
-    ) {}
+    constructor(protected companyService: CompanyService, protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.isSaving = false;
@@ -48,10 +43,6 @@ export class CompanyUpdateComponent implements OnInit {
     protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
-        this.eventManager.broadcast({
-            name: 'companyListModification',
-            content: 'Deleted an company'
-        });
     }
 
     protected onSaveError() {

@@ -94,6 +94,24 @@
                             <span jhiTranslate="global.menu.entities.tag">Tag</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="company" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.company">Company</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="column" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.column">Column</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="column-module" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.columnModule">Column Module</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

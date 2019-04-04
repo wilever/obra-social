@@ -3,23 +3,28 @@
     "fields": [
         {
             "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "String"
         },
         {
             "fieldName": "description",
             "fieldType": "String"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipValidateRules": "required",
+            "relationshipName": "company",
+            "otherEntityName": "module",
+            "otherEntityRelationshipName": "company"
+        }
+    ],
     "changelogDate": "20190321190516",
     "entityTableName": "company",
     "dto": "no",
     "pagination": "pagination",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

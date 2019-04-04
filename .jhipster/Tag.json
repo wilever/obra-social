@@ -13,7 +13,7 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "relationshipName": "name",
+            "relationshipName": "tag",
             "otherEntityName": "module",
             "otherEntityRelationshipName": "tag"
         }
@@ -23,7 +23,7 @@
     "dto": "no",
     "pagination": "pagination",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

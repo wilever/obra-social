@@ -7,6 +7,8 @@ import com.mycompany.domain.Module;
 import com.mycompany.repository.ModuleTypeRepository;
 import com.mycompany.service.ModuleTypeService;
 import com.mycompany.web.rest.errors.ExceptionTranslator;
+import com.mycompany.service.dto.ModuleTypeCriteria;
+import com.mycompany.service.ModuleTypeQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +57,9 @@ public class ModuleTypeResourceIntTest {
     private ModuleTypeService moduleTypeService;
 
     @Autowired
+    private ModuleTypeQueryService moduleTypeQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -76,7 +81,7 @@ public class ModuleTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ModuleTypeResource moduleTypeResource = new ModuleTypeResource(moduleTypeService);
+        final ModuleTypeResource moduleTypeResource = new ModuleTypeResource(moduleTypeService, moduleTypeQueryService);
         this.restModuleTypeMockMvc = MockMvcBuilders.standaloneSetup(moduleTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -99,7 +104,7 @@ public class ModuleTypeResourceIntTest {
         Module module = ModuleResourceIntTest.createEntity(em);
         em.persist(module);
         em.flush();
-        moduleType.getTypes().add(module);
+        moduleType.getModuleTypes().add(module);
         return moduleType;
     }
 
@@ -175,6 +180,138 @@ public class ModuleTypeResourceIntTest {
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        moduleTypeRepository.saveAndFlush(moduleType);
+
+        // Get all the moduleTypeList where type equals to DEFAULT_TYPE
+        defaultModuleTypeShouldBeFound("type.equals=" + DEFAULT_TYPE);
+
+        // Get all the moduleTypeList where type equals to UPDATED_TYPE
+        defaultModuleTypeShouldNotBeFound("type.equals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        moduleTypeRepository.saveAndFlush(moduleType);
+
+        // Get all the moduleTypeList where type in DEFAULT_TYPE or UPDATED_TYPE
+        defaultModuleTypeShouldBeFound("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE);
+
+        // Get all the moduleTypeList where type equals to UPDATED_TYPE
+        defaultModuleTypeShouldNotBeFound("type.in=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        moduleTypeRepository.saveAndFlush(moduleType);
+
+        // Get all the moduleTypeList where type is not null
+        defaultModuleTypeShouldBeFound("type.specified=true");
+
+        // Get all the moduleTypeList where type is null
+        defaultModuleTypeShouldNotBeFound("type.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        moduleTypeRepository.saveAndFlush(moduleType);
+
+        // Get all the moduleTypeList where description equals to DEFAULT_DESCRIPTION
+        defaultModuleTypeShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the moduleTypeList where description equals to UPDATED_DESCRIPTION
+        defaultModuleTypeShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        moduleTypeRepository.saveAndFlush(moduleType);
+
+        // Get all the moduleTypeList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultModuleTypeShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the moduleTypeList where description equals to UPDATED_DESCRIPTION
+        defaultModuleTypeShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        moduleTypeRepository.saveAndFlush(moduleType);
+
+        // Get all the moduleTypeList where description is not null
+        defaultModuleTypeShouldBeFound("description.specified=true");
+
+        // Get all the moduleTypeList where description is null
+        defaultModuleTypeShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllModuleTypesByModuleTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Module moduleType = ModuleResourceIntTest.createEntity(em);
+        em.persist(moduleType);
+        em.flush();
+        moduleType.addModuleType(moduleType);
+        moduleTypeRepository.saveAndFlush(moduleType);
+        Long moduleTypeId = moduleType.getId();
+
+        // Get all the moduleTypeList where moduleType equals to moduleTypeId
+        defaultModuleTypeShouldBeFound("moduleTypeId.equals=" + moduleTypeId);
+
+        // Get all the moduleTypeList where moduleType equals to moduleTypeId + 1
+        defaultModuleTypeShouldNotBeFound("moduleTypeId.equals=" + (moduleTypeId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultModuleTypeShouldBeFound(String filter) throws Exception {
+        restModuleTypeMockMvc.perform(get("/api/module-types?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(moduleType.getId().intValue())))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+
+        // Check, that the count call also returns 1
+        restModuleTypeMockMvc.perform(get("/api/module-types/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultModuleTypeShouldNotBeFound(String filter) throws Exception {
+        restModuleTypeMockMvc.perform(get("/api/module-types?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restModuleTypeMockMvc.perform(get("/api/module-types/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

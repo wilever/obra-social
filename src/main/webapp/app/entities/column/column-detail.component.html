@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="column">
+            <h2><span jhiTranslate="obraSocialApp.column.detail.title">Column</span> {{column.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="obraSocialApp.column.tableName">Table Name</span></dt>
+                <dd>
+                    <span>{{column.tableName}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.column.columnName">Column Name</span></dt>
+                <dd>
+                    <span>{{column.columnName}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.column.activeInd">Active Ind</span></dt>
+                <dd>
+                    <span>{{column.activeInd}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.column.dataType">Data Type</span></dt>
+                <dd>
+                    <span>{{column.dataType}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.column.description">Description</span></dt>
+                <dd>
+                    <span>{{column.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.column.defaultValue">Default Value</span></dt>
+                <dd>
+                    <span>{{column.defaultValue}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.column.module">Module</span></dt>
+                <dd>
+                    <div *ngIf="column.module">
+                        <a [routerLink]="['/module', column.module?.id, 'view']">{{column.module?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/column', column.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

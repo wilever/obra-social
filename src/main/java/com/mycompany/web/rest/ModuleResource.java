@@ -4,6 +4,8 @@ import com.mycompany.service.ModuleService;
 import com.mycompany.web.rest.errors.BadRequestAlertException;
 import com.mycompany.web.rest.util.HeaderUtil;
 import com.mycompany.web.rest.util.PaginationUtil;
+import com.mycompany.service.dto.ModuleCriteria;
+import com.mycompany.service.ModuleQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +36,11 @@ public class ModuleResource {
 
     private final ModuleService moduleService;
 
-    public ModuleResource(ModuleService moduleService) {
+    private final ModuleQueryService moduleQueryService;
+
+    public ModuleResource(ModuleService moduleService, ModuleQueryService moduleQueryService) {
         this.moduleService = moduleService;
+        this.moduleQueryService = moduleQueryService;
     }
 
     /**
@@ -82,14 +87,27 @@ public class ModuleResource {
      * GET  /modules : get all the modules.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of modules in body
      */
     @GetMapping("/modules")
-    public ResponseEntity<List<Module>> getAllModules(Pageable pageable) {
-        log.debug("REST request to get a page of Modules");
-        Page<Module> page = moduleService.findAll(pageable);
+    public ResponseEntity<List<Module>> getAllModules(ModuleCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Modules by criteria: {}", criteria);
+        Page<Module> page = moduleQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/modules");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /modules/count : count all the modules.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/modules/count")
+    public ResponseEntity<Long> countModules(ModuleCriteria criteria) {
+        log.debug("REST request to count Modules by criteria: {}", criteria);
+        return ResponseEntity.ok().body(moduleQueryService.countByCriteria(criteria));
     }
 
     /**

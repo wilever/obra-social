@@ -11,7 +11,7 @@ import { ModuleTypeService } from 'app/entities/module-type';
 import { ITag } from 'app/shared/model/tag.model';
 import { TagService } from 'app/entities/tag';
 import { ICompany } from 'app/shared/model/company.model';
-import { CompanyService } from '../company';
+import { CompanyService } from 'app/entities/company';
 
 @Component({
     selector: 'jhi-module-update',
@@ -67,8 +67,8 @@ export class ModuleUpdateComponent implements OnInit {
         this.companyService
             .query()
             .pipe(
-                filter((mayBeOk: HttpResponse<ITag[]>) => mayBeOk.ok),
-                map((response: HttpResponse<ITag[]>) => response.body)
+                filter((mayBeOk: HttpResponse<ICompany[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ICompany[]>) => response.body)
             )
             .subscribe((res: ICompany[]) => (this.companies = res), (res: HttpErrorResponse) => this.onError(res.message));
     }

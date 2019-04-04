@@ -9,6 +9,10 @@
                 <dd>
                     <span>{{module.name}}</span>
                 </dd>
+                <dt><span jhiTranslate="obraSocialApp.module.description">Description</span></dt>
+                <dd>
+                    <span>{{module.description}}</span>
+                </dd>
                 <dt><span jhiTranslate="obraSocialApp.module.module">Module</span></dt>
                 <dd>
                     <div *ngIf="module.module">
@@ -25,6 +29,12 @@
                 <dd>
                     <div *ngIf="module.tag">
                         <a [routerLink]="['/tag', module.tag?.id, 'view']">{{module.tag?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.module.company">Company</span></dt>
+                <dd>
+                    <div *ngIf="module.company">
+                        <a [routerLink]="['/company', module.company?.id, 'view']">{{module.company?.id}}</a>
                     </div>
                 </dd>
             </dl>

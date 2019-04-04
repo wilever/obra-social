@@ -4,6 +4,8 @@ import com.mycompany.service.CompanyService;
 import com.mycompany.web.rest.errors.BadRequestAlertException;
 import com.mycompany.web.rest.util.HeaderUtil;
 import com.mycompany.web.rest.util.PaginationUtil;
+import com.mycompany.service.dto.CompanyCriteria;
+import com.mycompany.service.CompanyQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +36,11 @@ public class CompanyResource {
 
     private final CompanyService companyService;
 
-    public CompanyResource(CompanyService companyService) {
+    private final CompanyQueryService companyQueryService;
+
+    public CompanyResource(CompanyService companyService, CompanyQueryService companyQueryService) {
         this.companyService = companyService;
+        this.companyQueryService = companyQueryService;
     }
 
     /**
@@ -82,14 +87,27 @@ public class CompanyResource {
      * GET  /companies : get all the companies.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of companies in body
      */
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getAllCompanies(Pageable pageable) {
-        log.debug("REST request to get a page of Companies");
-        Page<Company> page = companyService.findAll(pageable);
+    public ResponseEntity<List<Company>> getAllCompanies(CompanyCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Companies by criteria: {}", criteria);
+        Page<Company> page = companyQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/companies");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /companies/count : count all the companies.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/companies/count")
+    public ResponseEntity<Long> countCompanies(CompanyCriteria criteria) {
+        log.debug("REST request to count Companies by criteria: {}", criteria);
+        return ResponseEntity.ok().body(companyQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -4,6 +4,8 @@ import com.mycompany.service.ModuleTypeService;
 import com.mycompany.web.rest.errors.BadRequestAlertException;
 import com.mycompany.web.rest.util.HeaderUtil;
 import com.mycompany.web.rest.util.PaginationUtil;
+import com.mycompany.service.dto.ModuleTypeCriteria;
+import com.mycompany.service.ModuleTypeQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +36,11 @@ public class ModuleTypeResource {
 
     private final ModuleTypeService moduleTypeService;
 
-    public ModuleTypeResource(ModuleTypeService moduleTypeService) {
+    private final ModuleTypeQueryService moduleTypeQueryService;
+
+    public ModuleTypeResource(ModuleTypeService moduleTypeService, ModuleTypeQueryService moduleTypeQueryService) {
         this.moduleTypeService = moduleTypeService;
+        this.moduleTypeQueryService = moduleTypeQueryService;
     }
 
     /**
@@ -82,14 +87,27 @@ public class ModuleTypeResource {
      * GET  /module-types : get all the moduleTypes.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of moduleTypes in body
      */
     @GetMapping("/module-types")
-    public ResponseEntity<List<ModuleType>> getAllModuleTypes(Pageable pageable) {
-        log.debug("REST request to get a page of ModuleTypes");
-        Page<ModuleType> page = moduleTypeService.findAll(pageable);
+    public ResponseEntity<List<ModuleType>> getAllModuleTypes(ModuleTypeCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get ModuleTypes by criteria: {}", criteria);
+        Page<ModuleType> page = moduleTypeQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/module-types");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /module-types/count : count all the moduleTypes.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/module-types/count")
+    public ResponseEntity<Long> countModuleTypes(ModuleTypeCriteria criteria) {
+        log.debug("REST request to count ModuleTypes by criteria: {}", criteria);
+        return ResponseEntity.ok().body(moduleTypeQueryService.countByCriteria(criteria));
     }
 
     /**

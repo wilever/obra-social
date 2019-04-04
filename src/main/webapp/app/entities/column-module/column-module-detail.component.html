@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="columnModule">
+            <h2><span jhiTranslate="obraSocialApp.columnModule.detail.title">Column Module</span> {{columnModule.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="obraSocialApp.columnModule.tableName">Table Name</span></dt>
+                <dd>
+                    <span>{{columnModule.tableName}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.columnModule.columnName">Column Name</span></dt>
+                <dd>
+                    <span>{{columnModule.columnName}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.columnModule.activeInd">Active Ind</span></dt>
+                <dd>
+                    <span>{{columnModule.activeInd}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.columnModule.dataType">Data Type</span></dt>
+                <dd>
+                    <span>{{columnModule.dataType}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.columnModule.description">Description</span></dt>
+                <dd>
+                    <span>{{columnModule.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.columnModule.defaultValue">Default Value</span></dt>
+                <dd>
+                    <span>{{columnModule.defaultValue}}</span>
+                </dd>
+                <dt><span jhiTranslate="obraSocialApp.columnModule.module">Module</span></dt>
+                <dd>
+                    <div *ngIf="columnModule.module">
+                        <a [routerLink]="['/module', columnModule.module?.id, 'view']">{{columnModule.module?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/column-module', columnModule.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

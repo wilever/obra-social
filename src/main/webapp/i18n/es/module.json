@@ -16,8 +16,10 @@
                 "title": "Module"
             },
             "name": "Name",
+            "description": "Description",
             "module": "Module",
-            "name": "Name",
+            "module": "Module",
+            "module": "Module",
             "moduleType": "Module Type",
             "tag": "Tag",
             "company": "Company"

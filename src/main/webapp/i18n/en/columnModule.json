@@ -1,0 +1,27 @@
+{
+    "obraSocialApp": {
+        "columnModule": {
+            "home": {
+                "title": "Column Modules",
+                "createLabel": "Create a new Column Module",
+                "createOrEditLabel": "Create or edit a Column Module"
+            },
+            "created": "A new Column Module is created with identifier {{ param }}",
+            "updated": "A Column Module is updated with identifier {{ param }}",
+            "deleted": "A Column Module is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Column Module {{ id }}?"
+            },
+            "detail": {
+                "title": "Column Module"
+            },
+            "tableName": "Table Name",
+            "columnName": "Column Name",
+            "activeInd": "Active Ind",
+            "dataType": "Data Type",
+            "description": "Description",
+            "defaultValue": "Default Value",
+            "module": "Module"
+        }
+    }
+}

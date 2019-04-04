@@ -20,9 +20,9 @@
                         [(ngModel)]="moduleType.description" />
                 </div>
 
-                <div [hidden]="!(editForm.controls.type?.dirty && editForm.controls.type?.invalid)">
+                <div [hidden]="!(editForm.controls.moduleType?.dirty && editForm.controls.moduleType?.invalid)">
                     <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.type?.errors?.required" jhiTranslate="entity.validation.required">
+                        [hidden]="!editForm.controls.moduleType?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>

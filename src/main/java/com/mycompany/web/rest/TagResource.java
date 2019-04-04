@@ -4,6 +4,8 @@ import com.mycompany.service.TagService;
 import com.mycompany.web.rest.errors.BadRequestAlertException;
 import com.mycompany.web.rest.util.HeaderUtil;
 import com.mycompany.web.rest.util.PaginationUtil;
+import com.mycompany.service.dto.TagCriteria;
+import com.mycompany.service.TagQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +35,11 @@ public class TagResource {
 
     private final TagService tagService;
 
-    public TagResource(TagService tagService) {
+    private final TagQueryService tagQueryService;
+
+    public TagResource(TagService tagService, TagQueryService tagQueryService) {
         this.tagService = tagService;
+        this.tagQueryService = tagQueryService;
     }
 
     /**
@@ -81,14 +86,27 @@ public class TagResource {
      * GET  /tags : get all the tags.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of tags in body
      */
     @GetMapping("/tags")
-    public ResponseEntity<List<Tag>> getAllTags(Pageable pageable) {
-        log.debug("REST request to get a page of Tags");
-        Page<Tag> page = tagService.findAll(pageable);
+    public ResponseEntity<List<Tag>> getAllTags(TagCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Tags by criteria: {}", criteria);
+        Page<Tag> page = tagQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tags");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /tags/count : count all the tags.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/tags/count")
+    public ResponseEntity<Long> countTags(TagCriteria criteria) {
+        log.debug("REST request to count Tags by criteria: {}", criteria);
+        return ResponseEntity.ok().body(tagQueryService.countByCriteria(criteria));
     }
 
     /**
